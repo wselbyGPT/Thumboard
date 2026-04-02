@@ -274,7 +274,7 @@ const SmdCrystal12MHz = (props: any) => (
   <chip
     {...props}
     // First-pass placeholder footprint; swap to the exact ABM8 package footprint if needed.
-    footprint="qfn4_body_size3.2mm_p1.8mm"
+    footprint="kicad:Crystal:Crystal_SMD_Abracon_ABM8G-4pin_3.2x2.5mm"
     manufacturerPartNumber="ABM8-272-T3"
     pinLabels={{
       pin1: "XTAL1",
@@ -349,82 +349,29 @@ const header40PinLabels = {
   pin40: "GPIO23",
 } as const
 
-const RightHeader = (props: any) => (
-  <chip
-    {...props}
-    footprint="pinrow40_rows2"
-    pinLabels={header40PinLabels}
-    schWidth="18mm"
-    schPinArrangement={{
-      leftSide: {
-        direction: "top-to-bottom",
-        pins: [
-          "VBUS_5V",
-          "V3_3_A",
-          "SWDIO",
-          "RUN",
-          "UART0_TX",
-          "I2C1_SDA",
-          "SPI0_MISO",
-          "SPI0_SCK",
-          "ADC0",
-          "ADC1",
-          "ADC2",
-          "ADC3",
-          "GPIO8",
-          "GPIO10",
-          "GPIO12",
-          "GPIO14",
-          "GPIO16",
-          "GPIO18",
-          "GPIO20",
-          "GPIO22",
-        ],
-      },
-      rightSide: {
-        direction: "top-to-bottom",
-        pins: [
-          "GND_2",
-          "GND_4",
-          "SWCLK",
-          "USB_BOOT_N",
-          "UART0_RX",
-          "I2C1_SCL",
-          "SPI0_CSN",
-          "SPI0_MOSI",
-          "AGND_18",
-          "V3_3_B",
-          "AGND_22",
-          "V3_3_C",
-          "GPIO9",
-          "GPIO11",
-          "GPIO13",
-          "GPIO15",
-          "GPIO17",
-          "GPIO19",
-          "GPIO21",
-          "GPIO23",
-        ],
-      },
-    }}
-  />
-)
-
 export default () => {
   return (
-    <board width="70mm" height="25mm" pcbOrigin="center" layers={2}>
+    <board width="70mm" height="30mm" pcbOrigin="center" layers={2}>
       <pcbnotetext text="RP2354A HACKER BOARD REV A" pcbX={0} pcbY={-11.2} fontSize="1.2mm" layer="top" />
       <pcbnotetext text="USB" pcbX={-28} pcbY={-12.0} fontSize="0.9mm" layer="top" />
       <pcbnotetext text="USB_BOOT" pcbX={-15.5} pcbY={-9.6} fontSize="0.8mm" layer="top" />
       <pcbnotetext text="RUN" pcbX={-9.5} pcbY={-9.6} fontSize="0.8mm" layer="top" />
       <pcbnotetext text="SWD" pcbX={-3.2} pcbY={-9.6} fontSize="0.8mm" layer="top" />
       <pcbnotetext text="J3" pcbX={29.2} pcbY={0} fontSize="1.0mm" layer="top" />
+      <pcbnoterect pcbX={8.0} pcbY={0.0} width="18mm" height="15mm" strokeWidth="0.15mm" layer="top" />
+      <pcbnotetext text="MCU / CLOCK / VREG CORE" pcbX={8.0} pcbY={8.8} fontSize="0.7mm" layer="top" />
+
+      {/* Mounting holes */}
+      <hole name="H1" diameter="2.2mm" pcbX={-31} pcbY={-10.5} />
+      <hole name="H2" diameter="2.2mm" pcbX={31} pcbY={-10.5} />
+      <hole name="H3" diameter="2.2mm" pcbX={-31} pcbY={10.5} />
+      <hole name="H4" diameter="2.2mm" pcbX={31} pcbY={10.5} />
 
       {/* Top edge USB connector */}
       <MicroUsbB
         name="J1"
-        pcbX={-28}
-        pcbY={-9.4}
+        pcbX={-22}
+        pcbY={-10.0}
         pcbRotation={0}
         connections={{
           VBUS: NET.VBUS_5V,
@@ -440,24 +387,24 @@ export default () => {
         name="R7"
         resistance="27ohm"
         footprint="0402"
-        pcbX={-22.0}
-        pcbY={-8.6}
-        connections={{ left: NET.USB_DP_CONN, right: NET.USB_DP }}
+        pcbX={-17.2}
+        pcbY={-9.0}
+        connections={{ pin1: NET.USB_DP_CONN, pin2: NET.USB_DP }}
       />
       <resistor
         name="R8"
         resistance="27ohm"
         footprint="0402"
-        pcbX={-22.0}
-        pcbY={-7.2}
-        connections={{ left: NET.USB_DM_CONN, right: NET.USB_DM }}
+        pcbX={-17.2}
+        pcbY={-7.6}
+        connections={{ pin1: NET.USB_DM_CONN, pin2: NET.USB_DM }}
       />
 
       {/* 5V -> 3.3V LDO */}
       <Ncp1117_33
         name="U2"
-        pcbX={-20.0}
-        pcbY={0.5}
+        pcbX={-19.0}
+        pcbY={-0.8}
         pcbRotation={90}
         connections={{
           IN: NET.VBUS_5V,
@@ -471,8 +418,8 @@ export default () => {
         capacitance="10uF"
         polarized
         footprint="0805"
-        pcbX={-24.0}
-        pcbY={0.0}
+        pcbX={-23.2}
+        pcbY={-1.0}
         connections={{ pos: NET.VBUS_5V, neg: NET.GND }}
       />
       <capacitor
@@ -480,8 +427,8 @@ export default () => {
         capacitance="10uF"
         polarized
         footprint="0805"
-        pcbX={-16.0}
-        pcbY={0.0}
+        pcbX={-14.5}
+        pcbY={-1.0}
         connections={{ pos: NET.V3_3, neg: NET.GND }}
       />
 
@@ -489,40 +436,41 @@ export default () => {
       <pushbutton
         name="SW1"
         footprint="pushbutton_id1.3mm_od2mm"
-        pcbX={-15.5}
-        pcbY={-7.0}
+        pcbX={-13.5}
+        pcbY={-8.0}
         pcbRotation="90deg"
-        connections={{ pin1: NET.USB_BOOT_BTN, pin2: NET.GND }}
+        connections={{ pin1: NET.USB_BOOT_BTN, pin2: NET.GND, pin3: NET.USB_BOOT_BTN, pin4: NET.GND }}
       />
       <resistor
         name="R6"
         resistance="1k"
         footprint="0402"
-        pcbX={-15.5}
-        pcbY={-5.0}
-        connections={{ left: NET.USB_BOOT_N, right: NET.USB_BOOT_BTN }}
+        pcbX={-13.5}
+        pcbY={-6.1}
+        connections={{ pin1: NET.USB_BOOT_N, pin2: NET.USB_BOOT_BTN }}
       />
       <pushbutton
         name="SW2"
         footprint="pushbutton_id1.3mm_od2mm"
-        pcbX={-9.5}
-        pcbY={-7.0}
+        pcbX={-8.0}
+        pcbY={-8.0}
         pcbRotation="90deg"
-        connections={{ pin1: NET.RUN, pin2: NET.GND }}
+        connections={{ pin1: NET.RUN, pin2: NET.GND, pin3: NET.RUN, pin4: NET.GND }}
       />
       <SwdHeader
         name="J2"
-        pcbX={-3.5}
-        pcbY={-7.3}
+        pcbX={-1.8}
+        pcbY={-8.0}
         pcbRotation={90}
         connections={{ SWCLK: NET.SWCLK, GND: NET.GND, SWDIO: NET.SWDIO }}
       />
 
       {/* Center MCU */}
+      <breakout name="CORE" padding="1.0mm" autorouter="auto">
       <RP2354A
         name="U1"
-        pcbX={0}
-        pcbY={0}
+        pcbX={8.0}
+        pcbY={0.0}
         connections={{
           IOVDD_1: NET.V3_3,
           IOVDD_11: NET.V3_3,
@@ -587,48 +535,48 @@ export default () => {
         name="C6"
         capacitance="4.7uF"
         footprint="0402"
-        pcbX={-4.5}
-        pcbY={4.8}
+        pcbX={1.8}
+        pcbY={4.3}
         connections={{ pos: NET.V3_3, neg: NET.GND }}
       />
       <capacitor
         name="C7"
         capacitance="4.7uF"
         footprint="0402"
-        pcbX={-1.2}
-        pcbY={4.8}
+        pcbX={4.2}
+        pcbY={4.3}
         connections={{ pos: NET.V1_1, neg: NET.GND }}
       />
       <inductor
         name="L1"
         inductance="3.3uH"
         footprint="0805"
-        pcbX={2.5}
-        pcbY={4.4}
+        pcbX={6.6}
+        pcbY={4.3}
         connections={{ left: NET.V1_1, right: NET.VREG_LX }}
       />
       <resistor
         name="R3"
         resistance="33ohm"
         footprint="0402"
-        pcbX={0.0}
-        pcbY={-5.2}
-        connections={{ left: NET.V3_3, right: NET.VREG_AVDD }}
+        pcbX={1.8}
+        pcbY={-3.6}
+        connections={{ pin1: NET.V3_3, pin2: NET.VREG_AVDD }}
       />
       <capacitor
         name="C9"
         capacitance="4.7uF"
         footprint="0402"
-        pcbX={4.2}
-        pcbY={-5.2}
+        pcbX={4.4}
+        pcbY={-3.6}
         connections={{ pos: NET.VREG_AVDD, neg: NET.GND }}
       />
 
       {/* Crystal block */}
       <SmdCrystal12MHz
         name="Y1"
-        pcbX={-8.5}
-        pcbY={2.8}
+        pcbX={0.2}
+        pcbY={1.8}
         pcbRotation={90}
         connections={{
           XTAL1: NET.XIN,
@@ -641,82 +589,141 @@ export default () => {
         name="R2"
         resistance="1k"
         footprint="0402"
-        pcbX={-6.2}
-        pcbY={2.8}
-        connections={{ left: NET.XOUT, right: NET.XOUT_CRYSTAL }}
+        pcbX={2.8}
+        pcbY={1.8}
+        connections={{ pin1: NET.XOUT, pin2: NET.XOUT_CRYSTAL }}
       />
       <capacitor
         name="C3"
         capacitance="15pF"
         footprint="0402"
-        pcbX={-10.5}
-        pcbY={4.5}
+        pcbX={-1.4}
+        pcbY={3.3}
         connections={{ pos: NET.XIN, neg: NET.GND }}
       />
       <capacitor
         name="C4"
         capacitance="15pF"
         footprint="0402"
-        pcbX={-10.5}
-        pcbY={1.1}
+        pcbX={-1.4}
+        pcbY={0.3}
         connections={{ pos: NET.XOUT_CRYSTAL, neg: NET.GND }}
       />
 
       {/* Decoupling */}
-      <capacitor name="C10" capacitance="100nF" footprint="0402" pcbX={6.0} pcbY={-1.8} connections={{ pos: NET.V1_1, neg: NET.GND }} />
-      <capacitor name="C11" capacitance="100nF" footprint="0402" pcbX={6.0} pcbY={-0.4} connections={{ pos: NET.V3_3, neg: NET.GND }} />
-      <capacitor name="C12" capacitance="100nF" footprint="0402" pcbX={6.0} pcbY={1.0} connections={{ pos: NET.V3_3, neg: NET.GND }} />
-      <capacitor name="C13" capacitance="100nF" footprint="0402" pcbX={6.0} pcbY={2.4} connections={{ pos: NET.V3_3, neg: NET.GND }} />
-      <capacitor name="C14" capacitance="100nF" footprint="0402" pcbX={6.0} pcbY={3.8} connections={{ pos: NET.V3_3, neg: NET.GND }} />
-      <capacitor name="C15" capacitance="100nF" footprint="0402" pcbX={6.0} pcbY={5.2} connections={{ pos: NET.V3_3, neg: NET.GND }} />
+      <capacitor name="C10" capacitance="100nF" footprint="0402" pcbX={10.0} pcbY={-2.4} connections={{ pos: NET.V1_1, neg: NET.GND }} />
+      <capacitor name="C11" capacitance="100nF" footprint="0402" pcbX={10.0} pcbY={-1.0} connections={{ pos: NET.V3_3, neg: NET.GND }} />
+      <capacitor name="C12" capacitance="100nF" footprint="0402" pcbX={10.0} pcbY={0.4} connections={{ pos: NET.V3_3, neg: NET.GND }} />
+      <capacitor name="C13" capacitance="100nF" footprint="0402" pcbX={10.0} pcbY={1.8} connections={{ pos: NET.V3_3, neg: NET.GND }} />
+      <capacitor name="C14" capacitance="100nF" footprint="0402" pcbX={10.0} pcbY={3.2} connections={{ pos: NET.V3_3, neg: NET.GND }} />
+      <capacitor name="C15" capacitance="100nF" footprint="0402" pcbX={10.0} pcbY={4.6} connections={{ pos: NET.V3_3, neg: NET.GND }} />
+
+            <breakoutpoint connection={NET.UART0_TX} pcbX={1.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.UART0_RX} pcbX={3.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.I2C1_SDA} pcbX={5.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.I2C1_SCL} pcbX={7.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.SPI0_MISO} pcbX={9.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.SPI0_CSN} pcbX={11.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.SPI0_SCK} pcbX={13.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.SPI0_MOSI} pcbX={15.0} pcbY={6.2} />
+      <breakoutpoint connection={NET.ADC0} pcbX={1.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.ADC1} pcbX={3.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.ADC2} pcbX={5.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.ADC3} pcbX={7.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.GPIO8} pcbX={9.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.GPIO9} pcbX={11.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.GPIO10} pcbX={13.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.GPIO11} pcbX={15.0} pcbY={7.8} />
+      <breakoutpoint connection={NET.GPIO12} pcbX={1.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO13} pcbX={3.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO14} pcbX={5.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO15} pcbX={7.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO16} pcbX={9.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO17} pcbX={11.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO18} pcbX={13.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO19} pcbX={15.0} pcbY={9.4} />
+      <breakoutpoint connection={NET.GPIO20} pcbX={5.0} pcbY={11.0} />
+      <breakoutpoint connection={NET.GPIO21} pcbX={7.0} pcbY={11.0} />
+      <breakoutpoint connection={NET.GPIO22} pcbX={9.0} pcbY={11.0} />
+      <breakoutpoint connection={NET.GPIO23} pcbX={11.0} pcbY={11.0} />
+      </breakout>
 
       {/* Right-edge grouped-function expansion header */}
-      <RightHeader
+      <pinheader
         name="J3"
-        pcbX={27.5}
-        pcbY={0}
-        pcbRotation={90}
+        pinCount={40}
+        gender="male"
+        pitch="2.54mm"
+        footprint="pinrow40_rows2"
+        doubleRow={true}
+        showSilkscreenPinLabels={false}
+        pcbX={12}
+        pcbY={12.8}
+        pcbPositionAnchor="center_top"
+        pcbRotation="0deg"
+        pinLabels={[
+          "VBUS_5V", "GND",
+          "V3_3", "GND",
+          "SWDIO", "SWCLK",
+          "RUN", "USB_BOOT_N",
+          "UART0_TX", "UART0_RX",
+          "I2C1_SDA", "I2C1_SCL",
+          "SPI0_MISO", "SPI0_CSN",
+          "SPI0_SCK", "SPI0_MOSI",
+          "ADC0", "AGND",
+          "ADC1", "V3_3",
+          "ADC2", "AGND",
+          "ADC3", "V3_3",
+          "GPIO8", "GPIO9",
+          "GPIO10", "GPIO11",
+          "GPIO12", "GPIO13",
+          "GPIO14", "GPIO15",
+          "GPIO16", "GPIO17",
+          "GPIO18", "GPIO19",
+          "GPIO20", "GPIO21",
+          "GPIO22", "GPIO23"
+        ]}
         connections={{
-          VBUS_5V: NET.VBUS_5V,
-          GND_2: NET.GND,
-          V3_3_A: NET.V3_3,
-          GND_4: NET.GND,
-          SWDIO: NET.SWDIO,
-          SWCLK: NET.SWCLK,
-          RUN: NET.RUN,
-          USB_BOOT_N: NET.USB_BOOT_N,
-          UART0_TX: NET.UART0_TX,
-          UART0_RX: NET.UART0_RX,
-          I2C1_SDA: NET.I2C1_SDA,
-          I2C1_SCL: NET.I2C1_SCL,
-          SPI0_MISO: NET.SPI0_MISO,
-          SPI0_CSN: NET.SPI0_CSN,
-          SPI0_SCK: NET.SPI0_SCK,
-          SPI0_MOSI: NET.SPI0_MOSI,
-          ADC0: NET.ADC0,
-          AGND_18: NET.AGND,
-          ADC1: NET.ADC1,
-          V3_3_B: NET.V3_3,
-          ADC2: NET.ADC2,
-          AGND_22: NET.AGND,
-          ADC3: NET.ADC3,
-          V3_3_C: NET.V3_3,
-          GPIO8: NET.GPIO8,
-          GPIO9: NET.GPIO9,
-          GPIO10: NET.GPIO10,
-          GPIO11: NET.GPIO11,
-          GPIO12: NET.GPIO12,
-          GPIO13: NET.GPIO13,
-          GPIO14: NET.GPIO14,
-          GPIO15: NET.GPIO15,
-          GPIO16: NET.GPIO16,
-          GPIO17: NET.GPIO17,
-          GPIO18: NET.GPIO18,
-          GPIO19: NET.GPIO19,
-          GPIO20: NET.GPIO20,
-          GPIO21: NET.GPIO21,
-          GPIO22: NET.GPIO22,
-          GPIO23: NET.GPIO23,
+          pin1: NET.VBUS_5V,
+          pin2: NET.GND,
+          pin3: NET.V3_3,
+          pin4: NET.GND,
+          pin5: NET.SWDIO,
+          pin6: NET.SWCLK,
+          pin7: NET.RUN,
+          pin8: NET.USB_BOOT_N,
+          pin9: NET.UART0_TX,
+          pin10: NET.UART0_RX,
+          pin11: NET.I2C1_SDA,
+          pin12: NET.I2C1_SCL,
+          pin13: NET.SPI0_MISO,
+          pin14: NET.SPI0_CSN,
+          pin15: NET.SPI0_SCK,
+          pin16: NET.SPI0_MOSI,
+          pin17: NET.ADC0,
+          pin18: NET.AGND,
+          pin19: NET.ADC1,
+          pin20: NET.V3_3,
+          pin21: NET.ADC2,
+          pin22: NET.AGND,
+          pin23: NET.ADC3,
+          pin24: NET.V3_3,
+          pin25: NET.GPIO8,
+          pin26: NET.GPIO9,
+          pin27: NET.GPIO10,
+          pin28: NET.GPIO11,
+          pin29: NET.GPIO12,
+          pin30: NET.GPIO13,
+          pin31: NET.GPIO14,
+          pin32: NET.GPIO15,
+          pin33: NET.GPIO16,
+          pin34: NET.GPIO17,
+          pin35: NET.GPIO18,
+          pin36: NET.GPIO19,
+          pin37: NET.GPIO20,
+          pin38: NET.GPIO21,
+          pin39: NET.GPIO22,
+          pin40: NET.GPIO23,
         }}
       />
 
@@ -725,15 +732,15 @@ export default () => {
         name="R20"
         resistance="1k"
         footprint="0603"
-        pcbX={-10}
+        pcbX={-27}
         pcbY={9.4}
-        connections={{ left: NET.V3_3, right: NET.PWR_LED_ANODE }}
+        connections={{ pin1: NET.V3_3, pin2: NET.PWR_LED_ANODE }}
       />
       <led
         name="D1"
         footprint="0603"
         color="green"
-        pcbX={-7.0}
+        pcbX={-24.0}
         pcbY={9.4}
         connections={{ pos: NET.PWR_LED_ANODE, neg: NET.GND }}
       />
@@ -741,15 +748,15 @@ export default () => {
         name="R21"
         resistance="1k"
         footprint="0603"
-        pcbX={0}
+        pcbX={-18}
         pcbY={9.4}
-        connections={{ left: NET.USER_LED, right: NET.USER_LED_ANODE }}
+        connections={{ pin1: NET.USER_LED, pin2: NET.USER_LED_ANODE }}
       />
       <led
         name="D2"
         footprint="0603"
         color="blue"
-        pcbX={3.0}
+        pcbX={-15.0}
         pcbY={9.4}
         connections={{ pos: NET.USER_LED_ANODE, neg: NET.GND }}
       />
